@@ -1,0 +1,21 @@
+---
+title: "data-exploration-feedback"
+format: html
+editor: visual
+---
+
+## Data Exploration Feedback
+
+1.  Think about naming your .qmd files with names that describe what they do. For instance, `Dougher-Capstone-Project.qmd` doesn't identify that the file is where you are conducting your data exploration.
+2.  At line 27, I'd like to see more description of your thought processes. Your header says you will be looking for mistakes in the dates data set, but you seem to be mostly looking at changing variable types. I don't see much looking for mistakes. Work on providing more commentary on what you are thinking about before you write the code, perhaps that falls under each header.
+3.  Again, at line 57, you start plotting data, and you have a very long code chunk, but I'm not seeing any writing that shows me you are thinking about either WHY you are writing certain code or WHAT YOU ARE LEARNING about your data after running the code.
+4.  As part of your data exploration, I think you should be plotting and evaluating some histograms of your data. It turns out that humans are highly visual and good at pattern recognition, so looking at your data in a variety of plots will help you to understand it. For example:
+
+```{r}
+ggplot(dates, aes(VisitCount))+
+  geom_histogram()
+```
+
+5.  Line 133 - I like very much that you did a bunch of group_by and summarise calls, but again, I can't tell what you learned from looking at the data in these ways. You need to provide that commentary outside of code chunks.
+
+Ok - so this is a pretty good job looking over your data. I'd like to see more commentary though. For example: Did you see any outliers? What did you decide to do with them if you did, and why? What do you learn when you plot UniqueFeederCount against Sex?

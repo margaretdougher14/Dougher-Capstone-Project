@@ -6,6 +6,7 @@ editor: visual
 ---
 
 ## Setting things up
+
 ```{r}
 rm(list=ls()) #clears R's brain
 library(here) #lets R know where the file path is starting
@@ -15,6 +16,7 @@ library(multcomp)
 ```
 
 ## Importing Data Sets
+
 ```{r}
 feeder_visits <- read.csv(here("Data", "data_FeederVisits (1).csv"))
 survival <- read.csv(here("Data", "THC_Survival (1).csv"))
@@ -22,6 +24,7 @@ dates <- read.csv(here("Data", "data_AllDates (2).csv"))
 ```
 
 ## Looking for mistakes in the 'dates' data set
+
 ```{r}
 glimpse(dates) #looking at data
 
@@ -34,6 +37,7 @@ levels(dates$Sex)
 ```
 
 ## Looking for mistakes in the 'feeder_visits' data set
+
 ```{r}
 glimpse(feeder_visits) #looking at data
 
@@ -44,11 +48,13 @@ levels(feeder_visits$Feeder) #looking at different levels of feeders
 ```
 
 ## Looking for mistakes in 'survival' data set
+
 ```{r}
 glimpse(survival) # looking at data
 ```
 
 ## Looking for outliers using with the data and variables I will be looking at for relationships
+
 ```{r}
 # plotting the data to look for outsiders
 
@@ -86,6 +92,7 @@ dates %>% arrange(UniqueFeederCount) %>% tail(10) %>% View()
 ```
 
 ## Saving clean and revised data
+
 ```{r}
 write.csv(dates,here("Data", "dates.csv"), row.names = FALSE) #row.names=FALSE prevents R from adding a column of row numbers to the output file
 
@@ -95,6 +102,7 @@ write.csv(survival,here("Data", "survival.csv"), row.names = FALSE)
 ```
 
 ## Looking at the data using exploratory data anaylsis
+
 ```{r}
 summary(dates)
 
@@ -124,6 +132,7 @@ dates|>
 ```
 
 ## Plotting my data for analysis
+
 ```{r}
 ggplot(dates, aes(x = AvgTemp_C, y = VisitCount)) +
   geom_boxplot() +
@@ -139,6 +148,7 @@ ggplot(dates, aes(x = AvgTemp_C, y = VisitCount)) +
 ```
 
 ## Continuing to plot my data for analysis
+
 ```{r}
 ggplot(dates, aes(x = Age, y = UniqueFeederCount)) +
   geom_boxplot() +
