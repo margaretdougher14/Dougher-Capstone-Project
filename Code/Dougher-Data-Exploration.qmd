@@ -1,0 +1,182 @@
+---
+title: "Dougher-Capstone-Project"
+author: "Margaret Dougher"
+format: html
+editor: visual
+---
+
+## Setting things up
+
+```{r}
+rm(list=ls()) #clears R's brain
+library(here) #lets R know where the file path is starting
+library(tidyverse) #inserting necessary packages
+library(ggfortify)
+library(multcomp)
+```
+
+## Importing Data Sets
+
+```{r}
+feeder_visits <- read.csv(here("Data", "data_FeederVisits (1).csv"))
+survival <- read.csv(here("Data", "THC_Survival (1).csv"))
+dates <- read.csv(here("Data", "data_AllDates (2).csv"))
+```
+
+## Looking at my data
+
+```{r}
+glimpse(dates) 
+```
+
+I can see from using the glimpse function that for the data set dates, I have 10 columns of different variables, and I have 5,796 rows of different data. Looking at my data I need to change VisitDate from a character variable to a date variable. I also need to change Age_Sex and Sex from character variables to factor variables.
+
+## Changing variables
+
+```{r}
+dates$Age_Sex <- as.factor(dates$Age_Sex) #changing to factor variable
+dates$Sex <- as.factor(dates$Sex) 
+dates$VisitDate <- mdy(dates$VisitDate) #changing to date variable
+
+levels(dates$Age_Sex) #looking at different levels of Age_Sex
+levels(dates$Sex)
+```
+
+## Looking at my data
+
+```{r}
+glimpse(feeder_visits) 
+```
+
+Looking at my data I can see that there are 6 columns of different variables of data, and there is 392,974 rows of data. I do need to change some of variables data types. I need to change VisitDate to a date data type not a character variable. I also need to change Feeder from a character variable to a factor variable.
+
+## Changing variables
+
+```{r}
+feeder_visits$VisitDate <- mdy(feeder_visits$VisitDate) #changing to date variable
+feeder_visits$Feeder <- as.factor(feeder_visits$Feeder) #changing to factor variable
+
+levels(feeder_visits$Feeder) #looking at different levels of feeders
+```
+
+## Looking at my data
+
+```{r}
+glimpse(survival) 
+```
+
+From using the glimpse function I can see that my data has 2 columns, TransponderHexCode, and Survived. It also shows 138 rows of data. I do not need to change any of the data types for either of the variables.
+
+## Looking for outliers using with the data and variables I will be looking at for relationships
+
+```{r}
+# plotting the data to look for outliers
+
+ggplot(dates, aes(x = AvgTemp_C, y = VisitCount)) +
+  geom_boxplot() +
+  xlab("Average Temperature (C)") +
+  ylab("Visit Count") +
+  coord_flip() +
+  theme_bw()
+
+ggplot(dates, aes(x = Age, y = UniqueFeederCount)) +
+  geom_boxplot() +
+  theme_bw()
+
+ggplot(dates, aes(x = Sex, y = UniqueFeederCount)) +
+  geom_boxplot() +
+  theme_bw()
+
+#arranging the data to look for outliers
+
+dates %>% arrange(AvgTemp_C) %>% head(10) %>% View() #shows upper half of data
+dates %>% arrange(AvgTemp_C) %>% tail(10) %>% View() #shows lower half of data
+
+dates %>% arrange(VisitCount) %>% head(10) %>% View()
+dates %>% arrange(VisitCount) %>% tail(10) %>% View()
+
+dates %>% arrange(Age) %>% head(10) %>% View()
+dates %>% arrange(Age) %>% tail(10) %>% View()
+
+dates %>% arrange(Sex) %>% head(10) %>% View()
+dates %>% arrange(Sex) %>% tail(10) %>% View()
+
+dates %>% arrange(UniqueFeederCount) %>% head(10) %>% View()
+dates %>% arrange(UniqueFeederCount) %>% tail(10) %>% View()
+```
+
+## Saving clean and revised data
+
+```{r}
+write.csv(dates,here("Data", "dates.csv"), row.names = FALSE) #row.names=FALSE prevents R from adding a column of row numbers to the output file
+
+write.csv(feeder_visits,here("Data", "feeder_visits.csv"), row.names = FALSE)
+
+write.csv(survival,here("Data", "survival.csv"), row.names = FALSE)
+```
+
+## Looking at the data using exploratory data anaylsis
+
+```{r}
+summary(dates)
+
+dates |>
+  group_by(AvgTemp_C) |>
+  summarise(VisitCount) #looking at just these two variables together
+
+dates |>
+  group_by(AvgTemp_C) |>
+  summarise(meanVisitCount = mean(VisitCount)) #looking at the mean number of visits at each temperature
+
+dates |>
+  group_by(Age) |>
+  summarise(UniqueFeederCount)
+
+dates |>
+  group_by(Age) |>
+  summarise(meanUniqueFeederCount = mean(UniqueFeederCount)) #looking at the mean number of unique feeder visits at each age
+
+dates |>
+  group_by(Sex) |>
+  summarise(UniqueFeederCount)
+
+dates|> 
+  group_by(Sex) |>
+  summarise(meanUniqueFeederCount = mean(UniqueFeederCount)) #looking at the mean number of unique feeder visits by each sex
+```
+
+## Plotting my data for analysis
+
+```{r}
+ggplot(dates, aes(x = AvgTemp_C, y = VisitCount)) +
+  geom_boxplot() +
+  xlab("Average Temperature (C)") +
+  ylab("Visit Count") +
+  theme_bw()
+
+ggplot(dates, aes(x = AvgTemp_C, y = VisitCount)) +
+  geom_point(size = 1) +
+    xlab("Average Temperature (C)") +
+    ylab("Visit Count") +
+    theme_bw()
+```
+
+## Continuing to plot my data for analysis
+
+```{r}
+ggplot(dates, aes(x = Age, y = UniqueFeederCount)) +
+  geom_boxplot() +
+  theme_bw()
+
+ggplot(dates, aes(x = Age, y = UniqueFeederCount)) +
+  geom_point(size = 1) +
+    theme_bw()
+
+ggplot(dates, aes(x = Sex, y = UniqueFeederCount)) +
+  geom_boxplot() +
+  theme_bw()
+
+ggplot(dates, aes(x = UniqueFeederCount)) +
+  geom_histogram() +
+  facet_wrap(~Sex) #I used this type of graph only for this data because Sex only has two categories so it is better to visualize it like this
+```
