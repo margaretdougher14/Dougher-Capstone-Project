@@ -23,7 +23,14 @@ survival <- read.csv(here("Data", "THC_Survival (1).csv"))
 dates <- read.csv(here("Data", "data_AllDates (2).csv"))
 ```
 
+<<<<<<< HEAD:Code/Dougher-Data-Exploration.qmd
 ## Looking at my data
+=======
+## Looking for mistakes in the 'dates' data set
+
+```{r}
+glimpse(dates) #looking at data
+>>>>>>> 17f12f781c2ab30a7164bb9b3d9020bab13ff33c:Code/Dougher-Capstone-Project.qmd
 
 ```{r}
 glimpse(dates) 
@@ -42,7 +49,14 @@ levels(dates$Age_Sex) #looking at different levels of Age_Sex
 levels(dates$Sex)
 ```
 
+<<<<<<< HEAD:Code/Dougher-Data-Exploration.qmd
 ## Looking at my data
+=======
+## Looking for mistakes in the 'feeder_visits' data set
+
+```{r}
+glimpse(feeder_visits) #looking at data
+>>>>>>> 17f12f781c2ab30a7164bb9b3d9020bab13ff33c:Code/Dougher-Capstone-Project.qmd
 
 ```{r}
 glimpse(feeder_visits) 
@@ -59,7 +73,11 @@ feeder_visits$Feeder <- as.factor(feeder_visits$Feeder) #changing to factor vari
 levels(feeder_visits$Feeder) #looking at different levels of feeders
 ```
 
+<<<<<<< HEAD:Code/Dougher-Data-Exploration.qmd
 ## Looking at my data
+=======
+## Looking for mistakes in 'survival' data set
+>>>>>>> 17f12f781c2ab30a7164bb9b3d9020bab13ff33c:Code/Dougher-Capstone-Project.qmd
 
 ```{r}
 glimpse(survival) 
