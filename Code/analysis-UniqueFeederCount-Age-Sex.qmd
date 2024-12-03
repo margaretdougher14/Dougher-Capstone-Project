@@ -8,6 +8,7 @@ editor: visual
 In this file I am going to be performing a statistical analysis test, Chi-square test of independence, to look for a relationship between Age and Sex, and Unique Feeder Counts of Black chickadees.
 
 ## Set up
+
 ```{r}
 rm(list=ls()) #clear's R's brain
 library(here)
@@ -16,6 +17,7 @@ library(ggfortify)
 ```
 
 ## Reading in the data
+
 ```{r}
 dates <- read.csv(here("Data", "dates.csv"))
 ```
@@ -64,7 +66,8 @@ chisq.test(dates.mat)
 ```
 
 ## Interpreting my results
-There is a very small chance that we are seeing more of an association betwen Age and Unique Feeder Count. Therefore I can reject my null hypothesis that Age has an association with Unique Feeder Count, and Sex does not (X-squared = 202.07, df = 3, p-value = < 2.2e-16).
+
+There is a very small chance that we are seeing more of an association betwen Age and Unique Feeder Count. Therefore I can reject my null hypothesis that Age has an association with Unique Feeder Count, and Sex does not (X-squared = 202.07, df = 3, p-value = \< 2.2e-16).
 
 The last step is to interpret what the test shows me, but I am having a problem with my matrix it says that all entries of x must be nonnegative for the chi-square test, but I dont have any negative values in my data. I am unsure of how to fix this.
 
