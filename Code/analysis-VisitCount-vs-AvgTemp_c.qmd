@@ -8,6 +8,7 @@ editor: visual
 In this file I am going to be performing a statistical analysis test, linear regression, to look for a relationship between AvgTemp_c and VisitCount of Black chickadees.
 
 ## Set up
+
 ```{r}
 rm(list=ls()) #clear's R's brain
 library(here)
@@ -16,6 +17,7 @@ library(ggfortify)
 ```
 
 ## Reading in the data
+
 ```{r}
 dates <- read.csv(here("Data", "dates.csv"))
 ```
@@ -39,6 +41,7 @@ ggplot(dates, aes(x = AvgTemp_C, y = VisitCount)) +
 The slope is relatively positive, and roughly speaking, the VisitCount ranges between **0-280**. The AvgTemp_c ranges between **-18 to 5**. Looking at the graph I can also see that the y-intercept is somewhere around 0.
 
 ## Making a simple linear regression
+
 ```{r}
 model_dates <- lm(VisitCount ~ AvgTemp_C, data = dates)
 ```
