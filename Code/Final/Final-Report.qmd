@@ -1,0 +1,241 @@
+---
+title: "Final-Report"
+author: "Margaret Dougher"
+format: html
+editor: visual
+---
+
+## Introduction
+
+The data I am using for my final project I found on the database Dryad. The purpose of this data is to show the spatial patterns of Black-capped chickadees, along with the birds age and sex, so data scientists can look for relationships or associations between different variables. This data set contains data that was taken from the start date of January 9th 2023, to the end date of February 28th, 2023. It is important to note that the data files exclude data taken from the date February 15th to February 23rd. 
+
+There are 3 different files of data for this project. One contains the annual survival rate of birds that used feeders in the winter of 2023. Another contains the recordings of each birds feeder visits, and the last one contains data on the age, sex, feeder visit count, average temperature, etc. 
+
+For my project I used data from the dates file for both of my analyses. This file contains 5796 observations with 10 different variables.  For the two statistical analyses I performed I used the variables Age, Sex, VisitCount, AvgTemp_C, and UniqueFeederCount. 
+
+In order to analyze my data I needed to explore the different data sets and prepare them for analyses. Some of the steps I took to do this included changing some of the variables in the data set, such as changing VisitDate from a character variable to a date variable. I also plotted my data sets to look for outliers, along with using the arrange function as well to look for outliers. I did find a few outliers amongst my data, but none of them were substantial so I did not make any changes to outliers in my data sets. 
+
+After saving my new data sets that I prepared, I then went on to explore and mess around with the data using the group_by and summarise functions. This helped me to understand in what ways I should isolate my data for my chosen statistical analyses. I then went on to plot my data again, this time using the data I isolated from the step above to get a better visual on what my data would look like from the certain ways I arranged it. 
+
+## Analysis UniqueFeederCount-Age-Sex
+
+In this file I am going to be performing a statistical analysis test, Chi-square test of independence, to look for a relationship between Age and Sex, and Unique Feeder Counts of Black chickadees.
+
+## Set up
+
+```{r}
+rm(list=ls()) #clear's R's brain
+library(here)
+library(tidyverse)
+library(ggfortify)
+library(chisq.posthoc.test)
+```
+
+## Reading in the data
+
+```{r}
+dates <- read.csv(here("Data", "dates.csv"))
+```
+
+Question: Is there an association between the Age and/or Sex and the Unique Feeder Count of Black chickadees?
+
+Prediction: I believe that Age will be associated with Unique Feeder Count, but Sex will not. This is because the higher in age the black chickadees get the more dominant they will be in different territories. Therefor they will be able to go to more feeders since they will be able to dominant the younger chickadees. (Age, sex, and temperature etc., 2024)
+
+I am going to use group_by and summarise to organize the data I will be working with.
+
+```{r}
+totals <- dates |>
+  group_by(Age, Sex) |>
+  summarise(total.uniquefeedercount = sum(UniqueFeederCount, na.rm = T))
+```
+
+Since I am working with count data I am going to use a bar graph to plot the data originally.
+
+## Plotting the data
+
+```{r}
+ggplot(totals, aes(x = Age, y = total.uniquefeedercount, fill = Sex))+
+  ylab("Unique Feeder Count") +
+     geom_bar(stat = "identity", position = "dodge")
+```
+
+Looking at this graph I think that Age has more of an association to Unique Feeder Count than Sex. I would expect to accept my null hypothesis that Age will have an association with Unique Feeder Count and Sex will not.
+
+Now I need to create a matrix in order to perform the chi-square test of independence.
+
+```{r}
+dates.mat <- xtabs(total.uniquefeedercount ~ Age + Sex, data = totals)
+min <- min(totals$total.uniquefeedercount)
+max <- max(totals$total.uniquefeedercount)
+```
+
+Now that I have created the matrix I can run the test.
+
+```{r}
+chisq.test(dates.mat)
+```
+
+## Interpreting my results
+
+Since I have more than one age in my analysis, and I can see that there is a significant difference, I am going to perform a post-hoc comparisons test for the chi-square test.
+
+## Running post-hoc test
+
+```{r}
+chisq.posthoc.test(dates.mat, method = "bonferroni")
+```
+
+## Interpreting my results
+
+I can see that there is a significant difference between Age and Unique Feeder Count at the age's of 1 and 2 (p-value = 0), and the age of 3 (p-value = 0.001), and 6 (p-value = 0.023). There is no significant difference between Sex's and Unique Feeder Count shown, since the results for each age are the same for each sex.
+
+## Final Plot
+
+```{r}
+ggplot(totals, aes(x = Age, y = total.uniquefeedercount, fill = Sex))+
+  ylab("Unique Feeder Count") +
+     geom_boxplot()
+```
+
+## Final Results Statement
+
+From my results I will accept my null hypothesis that Age will be associated with Unique Feeder Count, but Sex will not (x^2 = 203.6, df = 6, p-value = <2.2e-16). From the residual values I calculated in my post-hoc comparison I can see that in all ages above 1 the residual values were relatively large. This shows me that Age does have an association with Unique Feeder Count. Biologically my results make sense because as Black-capped chickadees age they become stronger and more dominant over the younger birds, therefore they will be able to have their pick of feeders. (Age, sex, and temperatures etc., 2024).
+
+## Anylsis VisitCount-vs-AvgTemp_C
+
+In this file I am going to be performing a statistical analysis test, linear regression, to look for a relationship between AvgTemp_c and VisitCount of Black chickadees.
+
+## Set up
+
+```{r}
+rm(list=ls()) #clear's R's brain
+library(here)
+library(tidyverse)
+library(ggfortify)
+```
+
+## Reading in the data
+
+```{r}
+dates <- read.csv(here("Data", "dates.csv"))
+```
+
+Question: Is there a relationship between the AvgTemp_C and the VisitCount of Black chickadees?
+
+Prediction: The lower the average temperature, the more times Black chickadees will visit a feeder. This is because the colder it gets outside the more energy the chickadees will need, and they get their energy from consuming food. (How Chickadees Weather Winter, 2007).
+
+## Plotting the data
+
+Starting with a scatterplot
+
+```{r}
+ggplot(dates, aes(x = AvgTemp_C, y = VisitCount)) +
+  geom_point(size = 1) +
+  xlab("Visit Count") +
+  ylab("Average Temperature_C")
+  theme_bw()
+```
+
+## Interpreting the figure
+
+The slope is relatively positive, and roughly speaking, the VisitCount ranges between 0-280. The AvgTemp_c ranges between -25 to 5. Looking at the graph I can also see that the y-intercept is somewhere around 50. I think that the slope (rise/run) will be around 14. 
+
+## Making a simple linear regression
+
+```{r}
+model_dates <- lm(VisitCount ~ AvgTemp_C, data = dates)
+```
+
+After making the model I am now going to look at some assumptions.
+
+```{r}
+autoplot(model_dates)
+```
+
+This is showing me that I am performing the right test, linear regression, and that my data is pretty linear, but the normality looks a little bit off.
+
+I am going to produce a histogram to look more closely at my data.
+
+```{r}
+ggplot(dates, aes(x = VisitCount)) +
+  geom_histogram()
+```
+
+From this graph I can see that my values are slightly right skewed, which would explain why my normality is a bit off. 
+
+Because of this I am going to be performing a a GLM test.
+
+```{r}
+model_dates_1 <- glm(VisitCount ~ AvgTemp_C, data = dates, family = poisson)
+```
+
+After creating my new model using glm, I am going to now check my assumptions again with my new formatted data.
+
+```{r}
+autoplot(model_dates_1)
+```
+
+I can see now that although my normal distribution is not perfect, using the glm reduced some of the abnormality. 
+
+Now that my data is better fitted, I can start performing my statistical analysis.
+
+```{r}
+summary(model_dates_1)
+anova(model_dates_1, test = "Chisq")
+```
+
+Although temperature is statistically meaning full according to my p-value (p = 2e -16), it is not explaining a lot of the variance in the data. This is shown because the null deviance (102485) and the residual deviance (101728) are so close. 
+
+Now I am going to make a figure that shows off the relationship of my statistical results, but first I need to alter some of my data sets and make some new ones in order to plot the proper final graph.
+
+```{r}
+min.temp <- min(dates$AvgTemp_C)
+max.temp <- max(dates$AvgTemp_C)
+```
+
+```{r}
+new.x <- expand.grid(AvgTemp_C = seq(min.temp, max.temp, length = 1000)) #creating the new.x values using the variable AvgTemp_C
+```
+
+```{r}
+# generating fits and standard errors at new.x values
+new.y <- predict(model_dates_1, newdata = new.x, se.fit = T)
+new.y <- data.frame(new.y)
+```
+
+```{r}
+addThese <- data.frame(new.x, new.y) 
+```
+
+```{r}
+# adding the confidence intervals into the new data frame
+addThese <- mutate(addThese,
+  VisitCount = exp(fit), 
+  lwr = exp(fit - 1.96 * se.fit),
+  upr = exp(fit + 1.96 * se.fit)
+)
+```
+
+## Creating the final plot
+
+```{r}
+ggplot(dates, aes(AvgTemp_C, VisitCount)) +
+  geom_point(size = 2) +
+  geom_smooth(data = addThese, aes(ymin = lwr, ymax = upr), stat = "identity")
+```
+
+## Final Results Statement
+
+From my results I will accept my null hypothesis that the lower the average temperature, the more times Black chickadees will visit a feeder. Although I found that there was a significant difference between Average Temperature_C and Visit Count, the explanation for why there was was very low. As you can see from my graph it was very slightly significant. There is little explanation due to how low close the null deviance and the residual deviance were (p-value = 2.2e-16, Nd = 102485, Rd = 101728). Biologically my results make sense seeing as how little the chickadees are and how they need to visit feeders more often in colder weather in order to maintain the energy levels they need to survive (How Chickadees Weather Winter, 2007). The reason that the data shows little explanation for this relationship could have to do with the fact that some chickadees store their food in the winter, like squirrels. Meaning they wouldn't have to visit the feeders as much if they stored for winter. Another possible reason is that Black-capped Chickadees have the ability to go into night hypothermia in order to conserve large amounts of energy while they sleep. (How Chickadees Weather Winter, 2007). 
+
+## Challenges
+
+For both of my analyses I had to learn new forms of analyses in order to interpret and display my results in the right way. I had to learn how to perform a post-hoc comparisons test after performing a chi-square test of independence. This helped to give me a better understanding of the values I was looking and an easier way to look at the association between the variables I was testing.
+
+For my other anylses I had to learn how to perform a glm. Originally I had planed to perform a simple linear regression test, but in looking at my data the normality of my data was off. Therefore in order to try and minimalize this I needed to change the my linear regression to a glm. I learned how to use new functions such as expand.grid(), and exp() to isolate my lower and upper data in my matrix. My final graph showed a much better display and I learned how to work with data that did not have a nice normal distribution.
+
+## References
+
+Title: Age, sex, and temperature shape off-territory feeder use in black-capped chickadees, Authors: Megan LaRocque, Jan J Wijmenga, Kimberley J Mathot. Published: October 3rd, 2024.
+
+Title: How Chickadees Weather Winter. Author: George H. Harrison. Published: December 1st, 2007.

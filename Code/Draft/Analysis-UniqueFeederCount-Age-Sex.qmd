@@ -1,0 +1,82 @@
+---
+title: "analysis-UniqueFeederCount-Age-Sex"
+author: "Margaret Dougher"
+format: html
+editor: visual
+---
+
+In this file I am going to be performing a statistical analysis test, Chi-square test of independence, to look for a relationship between Age and Sex, and Unique Feeder Counts of Black chickadees.
+
+## Set up
+
+```{r}
+rm(list=ls()) #clear's R's brain
+library(here)
+library(tidyverse)
+library(ggfortify)
+library(chisq.posthoc.test)
+```
+
+## Reading in the data
+
+```{r}
+dates <- read.csv(here("Data", "dates.csv"))
+```
+
+Question: Is there an association between the Age and/or Sex and the Unique Feeder Count of Black chickadees?
+
+Prediction: I believe that Age will be associated with Unique Feeder Count, but Sex will not. This is because the higher in age the black chickadees get the more dominant they will be in different territories. Therefor they will be able to go to more feeders since they will be able to dominant the younger chickadees.
+
+I am going to use group_by and summarise to organize the data I will be working with.
+
+```{r}
+totals <- dates |>
+  group_by(Age, Sex) |>
+  summarise(total.uniquefeedercount = sum(UniqueFeederCount, na.rm = T))
+```
+
+Since I am working with count data I am going to use a bar graph to plot the data originally.
+
+## Plotting the data
+
+```{r}
+ggplot(totals, aes(x = Age, y = total.uniquefeedercount, fill = Sex))+
+  ylab("Unique Feeder Count") +
+     geom_bar(stat = "identity", position = "dodge")
+```
+
+Looking at this graph I think that Age has more of an association to Unique Feeder Count than Sex. I would expect to accept my null hypothesis that Age will have an association with Unique Feeder Count and Sex will not.
+
+Now I need to create a matrix in order to perform the chi-square test of independence.
+
+```{r}
+dates.mat <- xtabs(total.uniquefeedercount ~ Age + Sex, data = totals)
+```
+
+Now that I have created the matrix I can run the test.
+
+```{r}
+chisq.test(dates.mat)
+```
+
+## Interpreting my results
+
+Since I have more than one age in my analysis, and I can see that there is a significant difference, I am going to perform a post-hoc comparisons test for the chi-square test.
+
+## Running post-hoc test
+
+```{r}
+chisq.posthoc.test(dates.mat, method = "bonferroni")
+```
+
+## Interpreting my results
+
+We can see that there is a significant difference between Age and Unique Feeder Count at the age's of 1 and 2 (p-value = 0), and the age of 3 (p-value = 0.001), and 6 (p-value = 0.023). There is no significant difference between Sex's and Unique Feeder Count shown.
+
+## Final Plot
+
+```{r}
+ggplot(totals, aes(x = Age, y = total.uniquefeedercount, fill = Sex))+
+     geom_bar(stat = "identity", position = "dodge")
+```
+

@@ -1,0 +1,44 @@
+Margaret Dougher
+Biostatistics
+Capstone Project
+
+The purpose of this file is to note important things about my data set for my project, and to note any changes made towards the data while I am preparing it for statistical analysis.
+
+This is the citation for the website that I used to find my data:
+LaRocque, Megan Grace; Wijmenga, Jan; Mathot, Kimberley (2024). Data for: Age, sex, and temperature shape within- and among-individual space use in Black-capped Chickadees [Dataset]. Dryad. https://doi.org/10.5061/dryad.47d7wm3pn
+
+This is the web link to the site where I found my data:
+https://datadryad.org/stash/dataset/doi:10.5061/dryad.47d7wm3pn#readme
+
+This data set contains 3 different files of data. All the data was collected from January 9th to February 28th 2023. One data set contains data on annual survival of birds that used the feeders. Another contains each bird's visit recordings to the feeders, but it excludes February 15-23. The last one contains the dates and which they visited, including their age, sex and average temp of that day. 
+
+Key for the data file "data_AllDates.csv":
+
+VisitDate: date of observation (YYYY-MM-DD)
+TransponderHexCode: unique 10-digit hexadecimal PIT tag code
+UniqueFeederCount: the number of unique feeders visited by the bird on the given VisitDate
+AvgTemp: mean daily temperature in degrees Celcius
+Temp_stnd: the standardized temperature used in the analysis. Temperature was standardized by dividing values by 2 standard deviations so that the estimated effect of temperature reflects the effect of 1 s.d. change in temperature (i.e., 5.74°C).
+Sex: determined molecularly or by discriminant function score. Male or Female
+AgeBin: the binned age of birds (0 = birds hatched in 2022, “juveniles”; 1 = birds hatched in 2021 or earlier, “adults”)
+Age_Sex: a composite variable specifying the age (0 = juvenile or 1 = adult) and sex (male or female) of each individual, resulting in four levels (0Male, 0Female, 1Male, 1Female).
+VisitCount: the number of visits the bird made to feeders throughout the study site on the given VisitDate (i.e., daily feeding rate).
+Age: the minimum age of a bird with reference to their hatch year. The birds present in our study ranged in minimum age from 0 years (i.e., hatched in spring 2022) to 6 years (i.e., hatched in spring 2016 or earlier).
+
+Key for the data file "THC_Survival.csv":
+
+TransponderHexCode: unique 10-digit hexadecimal PIT tag code
+Survived: was a bird detected at our RFID-equipped feeders in Fall 2023 (i.e., did it survive?) (0 = no, 1 = yes)
+
+Key for the data file "data_FeederVisits.csv":
+
+VisitDate: date of observation (YYYY-MM-DD)
+Time: time of visit
+Feeder: location of feeder visited (02A, 04A, 09A, 11A, 12A, 16A)
+TransponderHexCode: unique 10-digit hexadecimal PIT tag code
+UniqueFeederCount_Total: the number of unique feeders visited by the bird calculated across the entire study period
+UniqueFeederCount_Day: the number of unique feeders visited by the bird on the given VisitDate
+
+Changes made to the data sets:
+1. Changing the collumn name "AvgTemp" to "AvgTemp_C" to reflect the fact that they took temperature in Celsius.
+2. Changing the column name "Temp_stnd" to "Temp_stnd_C" to also reflect the fact they they took these temperatures in Celsius.

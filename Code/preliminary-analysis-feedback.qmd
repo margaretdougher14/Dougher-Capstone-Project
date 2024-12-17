@@ -1,0 +1,52 @@
+---
+title: "prelim analysis feedback"
+format: html
+editor: visual
+---
+
+## Preliminary Analysis Feedback
+
+### General
+
+-   I really like that you start each .qmd with a statement about what you are doing in the file.
+-   You generally did a good job with the workflow we've been learning.
+-   Work on making a clear results statement, including appropriate test statistic values, etc.
+-   Work on adding in some biological insight - why, in terms of biology, are you making certain predictions, and when you consider the results of your analyses, do they make biological sense? Make note.
+
+### analysis-UniqueFeederCount-Age-Sex
+
+-Line 27 - you make a prediction, but I'd like to see a biological reason for your prediction in the final draft.
+
+-   Line 37 - You are correct that you don't have a lot of data. I wonder if using a different response variable, VisitCount, might be better? It gets at a slightly different question, but still a good one.
+
+-   Line 39 - I'd like to know WHY you decided to work just with the complete cases. With the reduced data set, you are really asking if there is an association between age and sex and number of unique feeders they visit for birds 3 years old an older.
+
+-   Line 53 - the trouble with your data is that by excluding the groups with zero unique feeder visits, it isn't clear from this figure if there are no 4-year old females or 5-year old males in the study or if those age groups just didn't go to any feeders.
+
+-   Line 70 "There is a very small chance that we are seeing more of an association betwen Age and Unique Feeder Count" is problematic - becasue really what we are observing is that "There is a very small chance that, if we conclude that there is an association between sex and age in feeder visits, we will be making a mistake in doing so".
+
+-   Because you have more than 1 ages in your analysis, the next step is to do post-hoc comparisions for a Chi-square test. We didn't learn how to do this, but I bet you can figure it out. [Here's a link that explains it](https://www.biostathandbook.com/chiind.html). Also, Sara needs to do this step as well, so you might chat together about it. I gave her the same link.
+
+-   Line 72 - I'm not getting that error message. Can you get a screen shot.
+
+I'd also like you to apply biology to your interpretation. Does the result make biological sense?
+
+What about a final plot?
+
+### Visit count vs. Avg Temp
+
+-   Line 8 - What do you expect to see? What is your null and alternative hypothesis? Is there any biological reasoning that can justify your expectation? It is fine to leave line 8 as is, but then at line 27 you should provide more detail.
+
+-   Line 27 - I might predict the opposite - the colder it is, the greater their energy need so the more likely they are to visit the feeder.
+
+-   Line 41 - so I see you have estimated the range of values, but what do you predict the actual slope (rise/run) to be?
+
+-   Line 54 - how do you understand the output of autoplot? What is it telling you about your data?
+
+-   Line 61 - With regression, we are looking for a relationship and not a difference. So we don't speak of a "signficant difference" between temp and visit count, but say that they are related. Also, what isnformation is there in the output of the `anova()` call beyond the F value that is informative?
+
+-   Line 69 - Again, what other information is there beyond the p-values? What is the adjusted R2 value and what does it tell you? What is the coefficient and what does it tell you? What is the complete results statement, in prose, that you would make from this analysis, including relevant output (F, p,etc.)
+
+-   Line 84 - yes, that is a good plot, and using geom_smooth is correct.
+
+Missing from this analysis was a clear results statement. Also, you aren't quite interpreting the outcome correctly (see line 42 above). I'd also like to see you finish guessing the relationship you should expect before running the analysis (the slope).

@@ -1,0 +1,130 @@
+---
+title: "Analysis-"
+author: "Margaret Dougher"
+format: html
+editor: visual
+---
+
+In this file I am going to be performing a statistical analysis test, linear regression, to look for a relationship between AvgTemp_c and VisitCount of Black chickadees.
+
+## Set up
+
+```{r}
+rm(list=ls()) #clear's R's brain
+library(here)
+library(tidyverse)
+library(ggfortify)
+```
+
+## Reading in the data
+
+```{r}
+dates <- read.csv(here("Data", "dates.csv"))
+```
+
+Question: Is there a relationship between the AvgTemp_C and the VisitCount of Black chickadees?
+
+Prediction: The lower the average temperature, the more times Black chickadees will visit a feeder. This is because the colder it gets outside the more energy the chickadees will need, and they get their energy from consuming food.
+
+## Plotting the data
+
+Starting with a scatterplot
+
+```{r}
+ggplot(dates, aes(x = AvgTemp_C, y = VisitCount)) +
+  geom_point(size = 1) +
+  xlab("Visit Count") +
+  ylab("Average Temperature_C")
+  theme_bw()
+```
+
+## Interpreting the figure
+
+The slope is relatively positive, and roughly speaking, the VisitCount ranges between 0-280. The AvgTemp_c ranges between -25 to 5. Looking at the graph I can also see that the y-intercept is somewhere around 50. I think that the slope (rise/run) will be around 14. 
+
+## Making a simple linear regression
+
+```{r}
+model_dates <- lm(VisitCount ~ AvgTemp_C, data = dates)
+```
+
+After making the model I am now going to look at some assumptions.
+
+```{r}
+autoplot(model_dates)
+```
+
+This is showing me that I am performing the right test, linear regression, and that my data is pretty linear, but the normality looks a little bit off.
+
+I am going to produce a histogram to look more closely at my data.
+
+```{r}
+ggplot(dates, aes(x = VisitCount)) +
+  geom_histogram()
+```
+
+From this graph I can see that my values are slightly right skewed, which would explain why my normality is a bit off. 
+
+Because of this I am going to be performing a a GLM test.
+
+```{r}
+model_dates_1 <- glm(VisitCount ~ AvgTemp_C, data = dates, family = poisson)
+```
+
+After creating my new model using glm, I am going to now check my assumptions again with my new formatted data.
+
+```{r}
+autoplot(model_dates_1)
+```
+
+I can see now that although my normal distribution is not perfect, using the glm reduced some of the abnormality. 
+
+Now that my data is better fitted, I can start performing my statistical analysis.
+
+```{r}
+summary(model_dates_1)
+anova(model_dates_1, test = "Chisq")
+```
+
+Although temperature is statistically meaning full according to my p-value (p = 2e -16), it is not explaining a lot of the variance in the data. This is shown because the null deviance (102485) and the residual deviance (101728) are so close. 
+
+Now I am going to make a figure that shows off the relationship of my statistical results, but first I need to alter some of my data sets and make some new ones in order to plot the proper final graph.
+
+```{r}
+min.temp <- min(dates$AvgTemp_C)
+max.temp <- max(dates$AvgTemp_C)
+```
+
+```{r}
+new.x <- expand.grid(AvgTemp_C = seq(min.temp, max.temp, length = 1000)) #creating the new.x values using the variable AvgTemp_C
+```
+
+```{r}
+# generating fits and standard errors at new.x values
+new.y <- predict(model_dates_1, newdata = new.x, se.fit = T)
+new.y <- data.frame(new.y)
+```
+
+```{r}
+addThese <- data.frame(new.x, new.y) 
+```
+
+```{r}
+# adding the confidence intervals into the new data frame
+addThese <- mutate(addThese,
+  VisitCount = exp(fit), 
+  lwr = exp(fit - 1.96 * se.fit),
+  upr = exp(fit + 1.96 * se.fit)
+)
+```
+
+## Creating the final plot
+
+```{r}
+ggplot(dates, aes(AvgTemp_C, VisitCount)) +
+  geom_point(size = 2) +
+  geom_smooth(data = addThese, aes(ymin = lwr, ymax = upr), stat = "identity")
+```
+
+## Results Statement
+ 
