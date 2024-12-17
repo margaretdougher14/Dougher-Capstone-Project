@@ -1,0 +1,84 @@
+---
+title: "Analysis-"
+author: "Margaret Dougher"
+format: html
+editor: visual
+---
+
+In this file I am going to be performing a statistical analysis test, linear regression, to look for a relationship between AvgTemp_c and VisitCount of Black chickadees.
+
+## Set up
+
+```{r}
+rm(list=ls()) #clear's R's brain
+library(here)
+library(tidyverse)
+library(ggfortify)
+```
+
+## Reading in the data
+
+```{r}
+dates <- read.csv(here("Data", "dates.csv"))
+```
+
+Question: Is there a relationship between the AvgTemp_C and the VisitCount of Black chickadees?
+
+Prediction: The lower the average temperature, the less times Black chickadees with visit a feeder.
+
+## Plotting the data
+
+Starting with a scatterplot
+
+```{r}
+ggplot(dates, aes(x = AvgTemp_C, y = VisitCount)) +
+  geom_point(size = 1) +
+  theme_bw()
+```
+
+## Interpreting the figure
+
+The slope is relatively positive, and roughly speaking, the VisitCount ranges between **0-280**. The AvgTemp_c ranges between **-18 to 5**. Looking at the graph I can also see that the y-intercept is somewhere around 0.
+
+## Making a simple linear regression
+
+```{r}
+model_dates <- lm(VisitCount ~ AvgTemp_C, data = dates)
+```
+
+After making the model I am now going to look at some assumptions.
+
+```{r}
+autoplot(model_dates)
+```
+
+## Making an interpretation
+
+```{r}
+anova(model_dates)
+```
+
+This table shows me that the F-value is rather large, indicating that there is most likely a significant difference between AvgTemp_C and VisitCount.
+
+I am also looking at a summary table for further analysis.
+
+```{r}
+summary(model_dates)
+```
+
+This shows us that the p-value is very small meaning there is a significant difference between AvgTemp_C and VisitCount. It also gives us our degrees of freedom, and our F-value. I will take into account that 171 observations were not included in this summary due to them being NA's.
+
+## Final plot
+
+Now I am going to make a figure that shows off the relationship of my statistical results.
+
+```{r}
+ggplot(dates, aes(x = AvgTemp_C, y = VisitCount)) +
+  geom_point(size = 1) +
+  geom_smooth(method = 'lm') + #added the fitted values and standard error to the figure
+  ylab("Visit Count") + #alters label of y and x axis
+  xlab("Average Temperature (C)") +
+  theme_bw()
+```
+
+I am unsure if this is the proper graph I should use, and if adding the geom_smooth() into the picture was the right idea?
