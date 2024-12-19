@@ -7,15 +7,15 @@ editor: visual
 
 ## Introduction
 
-The data I am using for my final project I found on the database Dryad. The purpose of this data is to show the spatial patterns of Black-capped chickadees, along with the birds age and sex, so data scientists can look for relationships or associations between different variables. This data set contains data that was taken from the start date of January 9th 2023, to the end date of February 28th, 2023. It is important to note that the data files exclude data taken from the date February 15th to February 23rd. 
+The data I am using for my final project I found on the database Dryad. The purpose of this data is to show the spatial patterns of Black-capped chickadees, along with the birds age and sex, so data scientists can look for relationships or associations between different variables. This data set contains data that was taken from the start date of January 9th 2023, to the end date of February 28th, 2023. It is important to note that the data files exclude data taken from the date February 15th to February 23rd.
 
-There are 3 different files of data for this project. One contains the annual survival rate of birds that used feeders in the winter of 2023. Another contains the recordings of each birds feeder visits, and the last one contains data on the age, sex, feeder visit count, average temperature, etc. 
+There are 3 different files of data for this project. One contains the annual survival rate of birds that used feeders in the winter of 2023. Another contains the recordings of each birds feeder visits, and the last one contains data on the age, sex, feeder visit count, average temperature, etc.
 
-For my project I used data from the dates file for both of my analyses. This file contains 5796 observations with 10 different variables.  For the two statistical analyses I performed I used the variables Age, Sex, VisitCount, AvgTemp_C, and UniqueFeederCount. 
+For my project I used data from the dates file for both of my analyses. This file contains 5796 observations with 10 different variables. For the two statistical analyses I performed I used the variables Age, Sex, VisitCount, AvgTemp_C, and UniqueFeederCount.
 
-In order to analyze my data I needed to explore the different data sets and prepare them for analyses. Some of the steps I took to do this included changing some of the variables in the data set, such as changing VisitDate from a character variable to a date variable. I also plotted my data sets to look for outliers, along with using the arrange function as well to look for outliers. I did find a few outliers amongst my data, but none of them were substantial so I did not make any changes to outliers in my data sets. 
+In order to analyze my data I needed to explore the different data sets and prepare them for analyses. Some of the steps I took to do this included changing some of the variables in the data set, such as changing VisitDate from a character variable to a date variable. I also plotted my data sets to look for outliers, along with using the arrange function as well to look for outliers. I did find a few outliers amongst my data, but none of them were substantial so I did not make any changes to outliers in my data sets.
 
-After saving my new data sets that I prepared, I then went on to explore and mess around with the data using the group_by and summarise functions. This helped me to understand in what ways I should isolate my data for my chosen statistical analyses. I then went on to plot my data again, this time using the data I isolated from the step above to get a better visual on what my data would look like from the certain ways I arranged it. 
+After saving my new data sets that I prepared, I then went on to explore and mess around with the data using the group_by and summarise functions. This helped me to understand in what ways I should isolate my data for my chosen statistical analyses. I then went on to plot my data again, this time using the data I isolated from the step above to get a better visual on what my data would look like from the certain ways I arranged it.
 
 ## Analysis UniqueFeederCount-Age-Sex
 
@@ -99,7 +99,7 @@ ggplot(totals, aes(x = Age, y = total.uniquefeedercount, fill = Sex))+
 
 ## Final Results Statement
 
-From my results I will accept my null hypothesis that Age will be associated with Unique Feeder Count, but Sex will not (x^2 = 203.6, df = 6, p-value = <2.2e-16). From the residual values I calculated in my post-hoc comparison I can see that in all ages above 1 the residual values were relatively large. This shows me that Age does have an association with Unique Feeder Count. Biologically my results make sense because as Black-capped chickadees age they become stronger and more dominant over the younger birds, therefore they will be able to have their pick of feeders. (Age, sex, and temperatures etc., 2024).
+From my results I will accept my null hypothesis that Age will be associated with Unique Feeder Count, but Sex will not (x\^2 = 203.6, df = 6, p-value = \<2.2e-16). From the residual values I calculated in my post-hoc comparison I can see that in all ages above 1 the residual values were relatively large. This shows me that Age does have an association with Unique Feeder Count. Biologically my results make sense because as Black-capped chickadees age they become stronger and more dominant over the younger birds, therefore they will be able to have their pick of feeders. (Age, sex, and temperatures etc., 2024).
 
 ## Anylsis VisitCount-vs-AvgTemp_C
 
@@ -138,7 +138,7 @@ ggplot(dates, aes(x = AvgTemp_C, y = VisitCount)) +
 
 ## Interpreting the figure
 
-The slope is relatively positive, and roughly speaking, the VisitCount ranges between 0-280. The AvgTemp_c ranges between -25 to 5. Looking at the graph I can also see that the y-intercept is somewhere around 50. I think that the slope (rise/run) will be around 14. 
+The slope is relatively positive, and roughly speaking, the VisitCount ranges between 0-280. The AvgTemp_c ranges between -25 to 5. Looking at the graph I can also see that the y-intercept is somewhere around 50. I think that the slope (rise/run) will be around 14.
 
 ## Making a simple linear regression
 
@@ -161,7 +161,7 @@ ggplot(dates, aes(x = VisitCount)) +
   geom_histogram()
 ```
 
-From this graph I can see that my values are slightly right skewed, which would explain why my normality is a bit off. 
+From this graph I can see that my values are slightly right skewed, which would explain why my normality is a bit off.
 
 Because of this I am going to be performing a a GLM test.
 
@@ -175,7 +175,7 @@ After creating my new model using glm, I am going to now check my assumptions ag
 autoplot(model_dates_1)
 ```
 
-I can see now that although my normal distribution is not perfect, using the glm reduced some of the abnormality. 
+I can see now that although my normal distribution is not perfect, using the glm reduced some of the abnormality.
 
 Now that my data is better fitted, I can start performing my statistical analysis.
 
@@ -184,7 +184,7 @@ summary(model_dates_1)
 anova(model_dates_1, test = "Chisq")
 ```
 
-Although temperature is statistically meaning full according to my p-value (p = 2e -16), it is not explaining a lot of the variance in the data. This is shown because the null deviance (102485) and the residual deviance (101728) are so close. 
+Although temperature is statistically meaning full according to my p-value (p = 2e -16), it is not explaining a lot of the variance in the data. This is shown because the null deviance (102485) and the residual deviance (101728) are so close.
 
 Now I am going to make a figure that shows off the relationship of my statistical results, but first I need to alter some of my data sets and make some new ones in order to plot the proper final graph.
 
@@ -226,7 +226,7 @@ ggplot(dates, aes(AvgTemp_C, VisitCount)) +
 
 ## Final Results Statement
 
-From my results I will accept my null hypothesis that the lower the average temperature, the more times Black chickadees will visit a feeder. Although I found that there was a significant difference between Average Temperature_C and Visit Count, the explanation for why there was was very low. As you can see from my graph it was very slightly significant. There is little explanation due to how low close the null deviance and the residual deviance were (p-value = 2.2e-16, Nd = 102485, Rd = 101728). Biologically my results make sense seeing as how little the chickadees are and how they need to visit feeders more often in colder weather in order to maintain the energy levels they need to survive (How Chickadees Weather Winter, 2007). The reason that the data shows little explanation for this relationship could have to do with the fact that some chickadees store their food in the winter, like squirrels. Meaning they wouldn't have to visit the feeders as much if they stored for winter. Another possible reason is that Black-capped Chickadees have the ability to go into night hypothermia in order to conserve large amounts of energy while they sleep. (How Chickadees Weather Winter, 2007). 
+From my results I will accept my null hypothesis that the lower the average temperature, the more times Black chickadees will visit a feeder. Although I found that there was a significant difference between Average Temperature_C and Visit Count, the explanation for why there was was very low. As you can see from my graph it was very slightly significant. There is little explanation due to how low close the null deviance and the residual deviance were (p-value = 2.2e-16, Nd = 102485, Rd = 101728). Biologically my results make sense seeing as how little the chickadees are and how they need to visit feeders more often in colder weather in order to maintain the energy levels they need to survive (How Chickadees Weather Winter, 2007). The reason that the data shows little explanation for this relationship could have to do with the fact that some chickadees store their food in the winter, like squirrels. Meaning they wouldn't have to visit the feeders as much if they stored for winter. Another possible reason is that Black-capped Chickadees have the ability to go into night hypothermia in order to conserve large amounts of energy while they sleep. (How Chickadees Weather Winter, 2007).
 
 ## Challenges
 
